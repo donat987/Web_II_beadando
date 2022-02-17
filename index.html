@@ -13,11 +13,19 @@ canvas {
 <script>
 
 var myGamePiece;
+var myObstacle ;
+var myObstacle1 ;
+var myObstacle2 ;
 var myBackground;
 
+
 function startGame() {
-    myGamePiece = new component(300, 600, "kepek/kocsi.png", 10, 120, "image");
-    myBackground = new component(2400, 15000, "kepek/ut.png", 0, 0, "background");
+    myGamePiece = new component(300, 600, "kepek/kocsi.png", 1050, 1200, "image");
+    myObstacle = new component(500, 750, "kepek/baleset.png", 30000, 120 , "image");
+    myObstacle1 = new component(300, 100, "kepek/kutya.png", 30000, 0 , "image");
+    myObstacle2 = new component(97, 80, "kepek/katyu.png", 30000, 0 , "image");
+   myBackground = new component(2400, 15000, "kepek/ut.png", 0, 0, "background");
+   
     myGameArea.start();
 }
 
@@ -66,12 +74,14 @@ function component(width, height, color, x, y, type) {
                 this.x, 
                 this.y,
                 this.width, this.height);
-        if (type == "background") {
+        
+         if (type == "background") {
             ctx.drawImage(this.image, 
                 this.x , 
                 this.y - this.height,
                 this.width, this.height);
         }
+        
         } else {
             ctx.fillStyle = color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -85,24 +95,76 @@ function component(width, height, color, x, y, type) {
                 this.y = 0;
             }
         }
-    }    
+    }
+    this.crashWith = function(otherobj) {
+    var myleft = this.x;
+    var myright = this.x + (this.width);
+    var mytop = this.y;
+    var mybottom = this.y + (this.height);
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + (otherobj.height);
+    var crash = true;
+    if ((mybottom < othertop) ||
+    (mytop > otherbottom) ||
+    (myright < otherleft) ||
+    (myleft > otherright)) {
+      crash = false;
+    }
+    return crash;
+  }    
 }
 
 function updateGameArea() {
+    let hiba=0;
+    if (myGamePiece.crashWith(myObstacle) || myGamePiece.crashWith(myObstacle1)) {
+        myGameArea.stop();
+  } else {
+    if(myGamePiece.crashWith(myObstacle2)){
+        if(Math.floor(Math.random() * 10) % 2 == 0){
+            hiba++;
+            myGamePiece.speedX = -50;
+        }else{
+            hiba++;
+            myGamePiece.speedY = 50;
+        }
+    }
     myGameArea.clear();
-    myBackground.speedX = 100;
+    myObstacle1.y += 20;
+    myObstacle1.x += 20;
+    myObstacle.y += 20;
+    myObstacle2.y += 20;
+    if(myObstacle.y > 8000){
+        myObstacle.y = -1000;
+        myObstacle.x = Math.floor(Math.random() * 1500)+500;
+    }
+    if(myObstacle2.y > 1500){
+        myObstacle2.y = -1000;
+        myObstacle2.x = Math.floor(Math.random() * 1500)+500;
+        
+    }
+    if(myObstacle1.y > 4000){
+        myObstacle1.y = -500;
+        myObstacle1.x = 0;
+    }
+    myBackground.speedX = 20;
     myBackground.newPos();    
     myBackground.update();
-    if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedY = -10; }
-    else if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedY = 10; }
-    else if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedX = -10; }
-    else if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedX = 10; }
-    else{
+    if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedY = -20; }
+    else if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedY = 20; }
+    else if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedX = -20; }
+    else if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedX = 20; }
+    else if (hiba == 0){
         myGamePiece.speedY = 0;
         myGamePiece.speedX = 0;
     }
+    myObstacle.update();
+    myObstacle1.update();
+    myObstacle2.update();
     myGamePiece.newPos();    
     myGamePiece.update();
+}
 }
 
 
