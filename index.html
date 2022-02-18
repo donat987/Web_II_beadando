@@ -12,20 +12,25 @@ canvas {
 <body onload="startGame()">
 <script>
 
-var myGamePiece;
-var myObstacle ;
-var myObstacle1 ;
-var myObstacle2 ;
-var myBackground;
+var Kocsi;
+var Hatter;
 
 
 function startGame() {
-    myGamePiece = new component(300, 600, "kepek/kocsi.png", 1050, 1200, "image");
-    myObstacle = new component(500, 750, "kepek/baleset.png", 30000, 120 , "image");
-    myObstacle1 = new component(300, 100, "kepek/kutya.png", 30000, 0 , "image");
-    myObstacle2 = new component(97, 80, "kepek/katyu.png", 30000, 0 , "image");
-   myBackground = new component(2400, 15000, "kepek/ut.png", 0, 0, "background");
-   
+    Kocsi = new component(300, 600, "kepek/piroskocsi.png", 1050, 1200, "image");
+    Kocsi1 = new component(300, 600, "kepek/kekkocsi.png", 30000, 1200, "image");
+    Kocsi2 = new component(300, 600, "kepek/sargakocsi.png", 30000, 1200, "image");
+    Taxi = new component(300, 600, "kepek/taxi.png", 30000, 1200, "image");
+    Nyuszi = new component(75, 40, "kepek/nyuszi.png", 30000, 1200, "image");
+    Baleset = new component(500, 270, "kepek/baleset.png", 30000, 120 , "image");
+    Kutya = new component(300, 100, "kepek/kutya.png", 30000, 0 , "image");
+    Katyu = new component(97, 80, "kepek/katyu.png", 30000, 0 , "image");
+    Busz = new component(320, 900, "kepek/busz.png", 30000, 0 , "image");
+   Hatter = new component(2400, 15000, "kepek/ut.png", 0, 0, "background");
+   AkadalyBal = new component(0, 2000, "kepek/akadalyszele.png", 350, 0, "image");
+   AkadalyJobb = new component(0, 2000, "kepek/akadalyszele.png", 2050, 0, "image");
+   AkadalyFent = new component(2400, 0, "kepek/akadalyteto.png", 0, 0, "image");
+   AkadalyLent = new component(10000, 4, "kepek/akadalyteto.png", 0, 0, "image");
     myGameArea.start();
 }
 
@@ -118,52 +123,129 @@ function component(width, height, color, x, y, type) {
 
 function updateGameArea() {
     let hiba=0;
-    if (myGamePiece.crashWith(myObstacle) || myGamePiece.crashWith(myObstacle1)) {
+    if (Kocsi.crashWith(Baleset) || Kocsi.crashWith(Kutya) || Kocsi.crashWith(Kocsi1) || Kocsi.crashWith(Kocsi2) || Kocsi.crashWith(Nyuszi) || Kocsi.crashWith(Taxi) || Kocsi.crashWith(Busz)) {
         myGameArea.stop();
   } else {
-    if(myGamePiece.crashWith(myObstacle2)){
+    if(Kocsi.crashWith(Katyu)){
         if(Math.floor(Math.random() * 10) % 2 == 0){
             hiba++;
-            myGamePiece.speedX = -50;
+            Kocsi.speedX = -5;
         }else{
             hiba++;
-            myGamePiece.speedY = 50;
+            Kocsi.speedY = 5;
         }
     }
     myGameArea.clear();
-    myObstacle1.y += 20;
-    myObstacle1.x += 20;
-    myObstacle.y += 20;
-    myObstacle2.y += 20;
-    if(myObstacle.y > 8000){
-        myObstacle.y = -1000;
-        myObstacle.x = Math.floor(Math.random() * 1500)+500;
+    AkadalyBal.y = 0;
+    AkadalyJobb.y = 0;
+    AkadalyFent.y = -200;
+    AkadalyLent.y = 2000;
+    Kutya.y += 20;
+    Kutya.x += 20;
+    Nyuszi.y += 20;
+    Nyuszi.x -= 25;
+    Baleset.y += 20;
+    Katyu.y += 20;
+    Busz.y += 10;
+    Kocsi1.y += 12;
+    Kocsi2.y += 13;
+    Taxi.y += 14;
+    if(Baleset.y > 37633){
+        Baleset.y = -1000;
+        Baleset.x = Math.floor(Math.random() * 1200)+400;
     }
-    if(myObstacle2.y > 1500){
-        myObstacle2.y = -1000;
-        myObstacle2.x = Math.floor(Math.random() * 1500)+500;
+    if(Katyu.y > 1500){
+        Katyu.y = -1000;
+        Katyu.x = Math.floor(Math.random() * 1200)+400;
         
     }
-    if(myObstacle1.y > 4000){
-        myObstacle1.y = -500;
-        myObstacle1.x = 0;
+    if(Kutya.y > 65713){
+        Kutya.y = -500;
+        Kutya.x = 0;
     }
-    myBackground.speedX = 20;
-    myBackground.newPos();    
-    myBackground.update();
-    if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedY = -20; }
-    else if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedY = 20; }
-    else if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedX = -20; }
-    else if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedX = 20; }
+    if(Nyuszi.y > 69313 ){
+        Nyuszi.y = -300;
+        Nyuszi.x = 2000;
+    }
+    if(Busz.y > 13669 ){
+        Busz.y = -1000;
+        Busz.x = Math.floor(Math.random() * 1200)+400;
+    }
+    if(Kocsi1.y > 3001){
+        Kocsi1.y = -1600;
+        Kocsi1.x = Math.floor(Math.random() * 1200)+400;
+    }
+    if(Kocsi2.y > 5281){
+        Kocsi2.y = -1600;
+        Kocsi2.x = Math.floor(Math.random() * 1200)+400;
+    }
+    if(Taxi.y > 9461){
+        Taxi.y = -1000;
+        Taxi.x = Math.floor(Math.random() * 1200)+400;
+    }
+    if(Kocsi.crashWith(AkadalyBal)){
+        Kocsi.speedY = 20
+    }
+    Hatter.speedX = 20;
+    Hatter.newPos();    
+    Hatter.update();
+    
+    //-----------------------------------------------------------------------------------
+    //--------------------             Irányítás            -----------------------------
+    //-----------------------------------------------------------------------------------
+    if (myGameArea.keys && myGameArea.keys[37]) {
+        if(Kocsi.crashWith(AkadalyBal)){
+            Kocsi.speedY = 0;
+        }else{
+            Kocsi.speedY = -20;
+        }
+    }
+    else if (myGameArea.keys && myGameArea.keys[39]) {
+        if(Kocsi.crashWith(AkadalyJobb)){
+            Kocsi.speedY = 0;
+        }else{
+            Kocsi.speedY = 20;
+        }
+    }
+    
+    else if (myGameArea.keys && myGameArea.keys[38]) {
+        if(Kocsi.crashWith(AkadalyFent)){
+            Kocsi.speedX = 0;
+        }else{
+            Kocsi.speedX = -20;
+        }
+    }
+    else if (myGameArea.keys && myGameArea.keys[40]) { 
+        if(Kocsi.crashWith(AkadalyLent)){
+            Kocsi.speedX = 0;
+        }else{
+            Kocsi.speedX = 20; 
+        } 
+    }
+
+
+
+
     else if (hiba == 0){
-        myGamePiece.speedY = 0;
-        myGamePiece.speedX = 0;
+
+        Kocsi.speedY = 0;
+        Kocsi.speedX = 0;
     }
-    myObstacle.update();
-    myObstacle1.update();
-    myObstacle2.update();
-    myGamePiece.newPos();    
-    myGamePiece.update();
+    Baleset.update();
+    Kutya.update();
+    Katyu.update();
+    Busz.update();
+    Kocsi1.update();
+    Kocsi2.update();
+    Taxi.update();
+    Nyuszi.update();
+    AkadalyBal.update();
+    AkadalyJobb.update();
+    AkadalyFent.update();
+    AkadalyLent.update();
+    Kocsi.newPos();    
+    Kocsi.update();
+    
 }
 }
 
