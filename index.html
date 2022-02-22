@@ -10,46 +10,72 @@ canvas {
 </style>
 </head>
 <body onload="startGame()">
+    <button onmousedown="restart()">Restart</button>
 <script>
 
 var Kocsi;
 var Hatter;
+var Pontszam;
+var Hatterzaj;
 
-
-function startGame() {
-    Kocsi = new component(300, 600, "kepek/piroskocsi.png", 1050, 1200, "image");
-    Kocsi1 = new component(300, 600, "kepek/kekkocsi.png", 30000, 1200, "image");
-    Kocsi2 = new component(300, 600, "kepek/sargakocsi.png", 30000, 1200, "image");
-    Taxi = new component(300, 600, "kepek/taxi.png", 30000, 1200, "image");
-    Nyuszi = new component(75, 40, "kepek/nyuszi.png", 30000, 1200, "image");
-    Baleset = new component(500, 270, "kepek/baleset.png", 30000, 120 , "image");
-    Kutya = new component(300, 100, "kepek/kutya.png", 30000, 0 , "image");
-    Katyu = new component(97, 80, "kepek/katyu.png", 30000, 0 , "image");
-    Busz = new component(320, 900, "kepek/busz.png", 30000, 0 , "image");
-   Hatter = new component(2400, 15000, "kepek/ut.png", 0, 0, "background");
-   AkadalyBal = new component(0, 2000, "kepek/akadalyszele.png", 350, 0, "image");
-   AkadalyJobb = new component(0, 2000, "kepek/akadalyszele.png", 2050, 0, "image");
-   AkadalyFent = new component(2400, 0, "kepek/akadalyteto.png", 0, 0, "image");
-   AkadalyLent = new component(10000, 4, "kepek/akadalyteto.png", 0, 0, "image");
-    myGameArea.start();
+function restart() {
+    Jatekter.stop();
+    Jatekter.clear();
+    startGame();
 }
 
-var myGameArea = {
+function startGame() {
+    Kocsi = new component(150, 300, "kepek/piroskocsi.png", 500, 600, "image");
+    Kocsi1 = new component(150, 300, "kepek/kekkocsi.png", 30000, 600, "image");
+    Kocsi2 = new component(150, 300, "kepek/sargakocsi.png", 30000, 600, "image");
+    Taxi = new component(150, 300, "kepek/taxi.png", 30000, 600, "image");
+    Nyuszi = new component(38, 20, "kepek/nyuszi.png", 30000, 600, "image");
+    Baleset = new component(250, 135, "kepek/baleset.png", 30000, 60 , "image");
+    Kutya = new component(150, 50, "kepek/kutya.png", 30000, 0 , "image");
+    Katyu = new component(50, 40, "kepek/katyu.png", 30000, 0 , "image");
+    Busz = new component(160, 450, "kepek/busz.png", 30000, 0 , "image");
+    Hatter = new component(1200, 22500, "kepek/ut.png", 0, 0, "background");
+    AkadalyBal = new component(0, 1000, "kepek/akadalyszele.png", 175, 0, "image");
+    AkadalyJobb = new component(0, 1000, "kepek/akadalyszele.png", 1025, 0, "image");
+    AkadalyFent = new component(1200, 0, "kepek/akadalyteto.png", 0, 0, "image");
+    AkadalyLent = new component(5000, 4, "kepek/akadalyteto.png", 0, 0, "image");
+
+    Penz = new component(30, 30, "kepek/penz.png", 15000, 0, "image");
+    Egyelet = new component(35, 35, "kepek/sziv+.png", 25, 25, "image");
+    Ketelet = new component(35, 35, "kepek/sziv+.png", 65, 25, "image");
+    Haromelet = new component(35, 35, "kepek/sziv+.png", 105, 25, "image");
+    Egyeletminusz = new component(35, 35, "kepek/sziv-.png", 15000, 25, "image");
+    Kettoeletminusz = new component(35, 35, "kepek/sziv-.png", 15000, 25, "image");
+    Haromeletminusz = new component(35, 35, "kepek/sziv-.png", 15000, 25, "image");
+    Pontszam = new component("25px", "Consolas", "black", 1050, 50, "text");
+    Hatterzaj = new sound("kepek/hatterzaj.mp3");
+    Coin = new sound("kepek/coin.mp3");
+    Utkozes = new sound("kepek/utkozes.mp3");
+    Uthiba = new sound("kepek/katyu.mp3");
+    Hatterzaj.play();
+    Jatekter.start();
+}
+
+var Jatekter = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 2400;
-        this.canvas.height = 1500;
+        this.canvas.width = 1200;
+        this.canvas.height = 750;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.frameNo = 0;
+        this.Megtettut = 0;
+        this.penzszamol = 0;
+        this.coinszamol = 0;
+        this.elet = 0;
+        this.sebesseg = 10;
         this.interval = setInterval(updateGameArea, 20);
         window.addEventListener('keydown', function (e) {
             e.preventDefault();
-            myGameArea.keys = (myGameArea.keys || []);
-            myGameArea.keys[e.keyCode] = (e.type == "keydown");
+            Jatekter.keys = (Jatekter.keys || []);
+            Jatekter.keys[e.keyCode] = (e.type == "keydown");
         })
         window.addEventListener('keyup', function (e) {
-            myGameArea.keys[e.keyCode] = (e.type == "keydown");
+            Jatekter.keys[e.keyCode] = (e.type == "keydown");
         })
         },
     clear : function() {
@@ -73,20 +99,23 @@ function component(width, height, color, x, y, type) {
     this.x = x;
     this.y = y;    
     this.update = function() {
-        ctx = myGameArea.context;
-        if (type == "image" || type == "background") {
+        ctx = Jatekter.context;
+        if(type == "text"){
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+        }
+        if (type == "image" || type == "background" ) { 
             ctx.drawImage(this.image, 
-                this.x, 
-                this.y,
-                this.width, this.height);
-        
-         if (type == "background") {
-            ctx.drawImage(this.image, 
+            this.x, 
+            this.y,
+            this.width, this.height);
+            if (type == "background") { 
+                ctx.drawImage(this.image, 
                 this.x , 
                 this.y - this.height,
                 this.width, this.height);
-        }
-        
+            }
         } else {
             ctx.fillStyle = color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -96,159 +125,252 @@ function component(width, height, color, x, y, type) {
         this.y += this.speedX;
         this.x += this.speedY;
         if (this.type == "background") {
-            if (this.y == +(this.height)) {
+            if (this.y == (this.height)) {
                 this.y = 0;
             }
         }
     }
     this.crashWith = function(otherobj) {
-    var myleft = this.x;
-    var myright = this.x + (this.width);
-    var mytop = this.y;
-    var mybottom = this.y + (this.height);
-    var otherleft = otherobj.x;
-    var otherright = otherobj.x + (otherobj.width);
-    var othertop = otherobj.y;
-    var otherbottom = otherobj.y + (otherobj.height);
-    var crash = true;
-    if ((mybottom < othertop) ||
-    (mytop > otherbottom) ||
-    (myright < otherleft) ||
-    (myleft > otherright)) {
-      crash = false;
-    }
-    return crash;
-  }    
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }    
 }
+
+
+
 
 function updateGameArea() {
     let hiba=0;
     if (Kocsi.crashWith(Baleset) || Kocsi.crashWith(Kutya) || Kocsi.crashWith(Kocsi1) || Kocsi.crashWith(Kocsi2) || Kocsi.crashWith(Nyuszi) || Kocsi.crashWith(Taxi) || Kocsi.crashWith(Busz)) {
-        myGameArea.stop();
-  } else {
-    if(Kocsi.crashWith(Katyu)){
-        if(Math.floor(Math.random() * 10) % 2 == 0){
-            hiba++;
-            Kocsi.speedX = -5;
-        }else{
-            hiba++;
-            Kocsi.speedY = 5;
+        if(Kocsi.crashWith(Busz)){
+            Busz.y=20000;
+            Jatekter.elet++;
         }
-    }
-    myGameArea.clear();
-    AkadalyBal.y = 0;
-    AkadalyJobb.y = 0;
-    AkadalyFent.y = -200;
-    AkadalyLent.y = 2000;
-    Kutya.y += 20;
-    Kutya.x += 20;
-    Nyuszi.y += 20;
-    Nyuszi.x -= 25;
-    Baleset.y += 20;
-    Katyu.y += 20;
-    Busz.y += 10;
-    Kocsi1.y += 12;
-    Kocsi2.y += 13;
-    Taxi.y += 14;
-    if(Baleset.y > 37633){
-        Baleset.y = -1000;
-        Baleset.x = Math.floor(Math.random() * 1200)+400;
-    }
-    if(Katyu.y > 1500){
-        Katyu.y = -1000;
-        Katyu.x = Math.floor(Math.random() * 1200)+400;
+        if(Kocsi.crashWith(Taxi)){
+            Utkozes.play();
+            Taxi.y=20000;
+            Jatekter.elet++;
+        }
+        if(Kocsi.crashWith(Nyuszi)){
+            Utkozes.play();
+            Nyuszi.y=20000;
+            Jatekter.elet++;
+        }
+        if(Kocsi.crashWith(Kutya)){
+            Utkozes.play();
+            Kutya.y=20000;
+            Jatekter.elet++;
+        }
+        if(Kocsi.crashWith(Kocsi1)){
+            Utkozes.play();
+            Kocsi1.y=20000;
+            Jatekter.elet++;
+        }
+        if(Kocsi.crashWith(Kocsi2)){
+            Utkozes.play();
+            Kocsi2.y=20000;
+            Jatekter.elet++;
+        }
+        if(Kocsi.crashWith(Baleset)){
+            Utkozes.play();
+            Baleset.y=20000;
+            Jatekter.elet++;
+        }
+        if(Kocsi.crashWith(Busz)){
+            Utkozes.play();
+            Busz.y=20000;
+            Jatekter.elet++;
+        }
+        if(Jatekter.elet == 1){
+            Egyeletminusz.x = 105;
+            Haromelet.x = 20000;
+        }
+        if(Jatekter.elet == 2){
+            Kettoeletminusz.x = 65;
+            Ketelet.x = 20000;
+        }
+        if(Jatekter.elet == 3){
+            Haromeletminusz.x = 25;
+            Haromelet.x = 20000;
+        }
+        if(Jatekter.elet >= 4){
+            Hatterzaj.stop();
+            Jatekter.stop();
+        }
+    } 
+    
+    else {
+        if(Kocsi.crashWith(Katyu)){
+            if(Math.floor(Math.random() * 10) % 2 == 0){
+                Uthiba.play();
+                hiba++;
+                Kocsi.speedX = -5;
+            }else{
+                Uthiba.play();
+                hiba++;
+                Kocsi.speedY = 5;
+            }
+        }
+        if(Jatekter.Megtettut % 100 == 0 && Jatekter.sebesseg <= 17){
+            Jatekter.sebesseg += 1;
+        }
+        Jatekter.clear();
+        Jatekter.Megtettut += 0.1;
+        AkadalyBal.y = 0;
+        AkadalyJobb.y = 0;
+        AkadalyFent.y = -100;
+        AkadalyLent.y = 1000;
+        Kutya.y += 10;
+        Kutya.x += 10;
+        Nyuszi.y += 10;
+        Nyuszi.x -= 8;
+        Baleset.y += 10;
+        Katyu.y += 10;
+        Busz.y += 5;
+        Penz.y += 10;
+        Kocsi1.y +=  Jatekter.sebesseg-4;
+        Kocsi2.y +=  Jatekter.sebesseg-3;
+        Taxi.y +=  Jatekter.sebesseg-3;
+        if(Penz.y > 2000){
+            penzszamol = 0;
+            Penz.y = -500;
+            Penz.x = Math.floor(Math.random() * 300)+200;
+        }
+        if (Kocsi.crashWith(Penz) && penzszamol == 0){
+            penzszamol ++;
+            Jatekter.coinszamol += 50;
+            Coin.play();
+            Penz.x = 20000
+        }
+        if(Baleset.y > 37633){
+            Baleset.y = -500;
+            Baleset.x = Math.floor(Math.random() * 300)+200;
+        }
+        if(Katyu.y > 750){
+            Katyu.y = -500;
+            Katyu.x = Math.floor(Math.random() * 300)+200;
+        }
+        if(Kutya.y > 65713){
+            Kutya.y = -250;
+            Kutya.x = 0;
+        }
+        if(Nyuszi.y > 69313 ){
+            Nyuszi.y = -75;
+            Nyuszi.x = 2000;
+        }
+        if(Busz.y > 13669 ){
+            Busz.y = -500;
+            Busz.x = Math.floor(Math.random() * 300)+200;
+        }
+        if(Kocsi1.y > 1501){
+            Kocsi1.y = -650;
+            Kocsi1.x = Math.floor(Math.random() * 300)+200;
+        }
+        if(Kocsi2.y > 5281){
+            Kocsi2.y = -650;
+            Kocsi2.x = Math.floor(Math.random() * 300)+200;
+        }
+        if(Taxi.y > 9461){
+            Taxi.y = -500;
+            Taxi.x = Math.floor(Math.random() * 300)+200;
+        }
+        if(Kocsi.crashWith(AkadalyBal)){
+            Kocsi.speedY = 10
+        }
+        Hatter.speedX = 10;
+        Hatter.newPos();    
+        Hatter.update();
+        //-----------------------------------------------------------------------------------
+        //--------------------             Irányítás            -----------------------------
+        //-----------------------------------------------------------------------------------
+        if (Jatekter.keys && Jatekter.keys[37]) {
+            if(Kocsi.crashWith(AkadalyBal)){
+                Kocsi.speedY = 0;
+            }else{
+                Kocsi.speedY = -Jatekter.sebesseg;
+            }
+        }
+        else if (Jatekter.keys && Jatekter.keys[39]) {
+            if(Kocsi.crashWith(AkadalyJobb)){
+                Kocsi.speedY = 0;
+            }else{
+                Kocsi.speedY = Jatekter.sebesseg;
+            }
+        }
+        
+        else if (Jatekter.keys && Jatekter.keys[38]) 
+        {
+            if(Kocsi.crashWith(AkadalyFent)){
+                Kocsi.speedX = 0;
+            }else{
+                Kocsi.speedX = -Jatekter.sebesseg;
+            }
+        }
+        else if (Jatekter.keys && Jatekter.keys[40]) 
+        { 
+            if(Kocsi.crashWith(AkadalyLent)){
+                Kocsi.speedX = 0;
+            }else{
+                Kocsi.speedX = Jatekter.sebesseg; 
+            } 
+        }
+        else if (hiba == 0)
+        {
+            Kocsi.speedY = 0;
+            Kocsi.speedX = 0;
+        }
+        Baleset.update();
+        Kutya.update();
+        Katyu.update();
+        Busz.update();
+        Kocsi1.update();
+        Kocsi2.update();
+        Taxi.update();
+        Nyuszi.update();
+        AkadalyBal.update();
+        AkadalyJobb.update();
+        AkadalyFent.update();
+        Penz.update();
+        AkadalyLent.update();
+        Pontszam.text = "Pont: " + Math.round(Jatekter.Megtettut+Jatekter.coinszamol);
+        Pontszam.update();
+        Egyelet.update();
+        Ketelet.update();
+        Haromelet.update();
+        Egyeletminusz.update();
+        Kettoeletminusz.update();
+        Haromeletminusz.update();
+        Kocsi.newPos();    
+        Kocsi.update();
         
     }
-    if(Kutya.y > 65713){
-        Kutya.y = -500;
-        Kutya.x = 0;
-    }
-    if(Nyuszi.y > 69313 ){
-        Nyuszi.y = -300;
-        Nyuszi.x = 2000;
-    }
-    if(Busz.y > 13669 ){
-        Busz.y = -1000;
-        Busz.x = Math.floor(Math.random() * 1200)+400;
-    }
-    if(Kocsi1.y > 3001){
-        Kocsi1.y = -1600;
-        Kocsi1.x = Math.floor(Math.random() * 1200)+400;
-    }
-    if(Kocsi2.y > 5281){
-        Kocsi2.y = -1600;
-        Kocsi2.x = Math.floor(Math.random() * 1200)+400;
-    }
-    if(Taxi.y > 9461){
-        Taxi.y = -1000;
-        Taxi.x = Math.floor(Math.random() * 1200)+400;
-    }
-    if(Kocsi.crashWith(AkadalyBal)){
-        Kocsi.speedY = 20
-    }
-    Hatter.speedX = 20;
-    Hatter.newPos();    
-    Hatter.update();
-    
-    //-----------------------------------------------------------------------------------
-    //--------------------             Irányítás            -----------------------------
-    //-----------------------------------------------------------------------------------
-    if (myGameArea.keys && myGameArea.keys[37]) {
-        if(Kocsi.crashWith(AkadalyBal)){
-            Kocsi.speedY = 0;
-        }else{
-            Kocsi.speedY = -20;
-        }
-    }
-    else if (myGameArea.keys && myGameArea.keys[39]) {
-        if(Kocsi.crashWith(AkadalyJobb)){
-            Kocsi.speedY = 0;
-        }else{
-            Kocsi.speedY = 20;
-        }
-    }
-    
-    else if (myGameArea.keys && myGameArea.keys[38]) {
-        if(Kocsi.crashWith(AkadalyFent)){
-            Kocsi.speedX = 0;
-        }else{
-            Kocsi.speedX = -20;
-        }
-    }
-    else if (myGameArea.keys && myGameArea.keys[40]) { 
-        if(Kocsi.crashWith(AkadalyLent)){
-            Kocsi.speedX = 0;
-        }else{
-            Kocsi.speedX = 20; 
-        } 
-    }
-
-
-
-
-    else if (hiba == 0){
-
-        Kocsi.speedY = 0;
-        Kocsi.speedX = 0;
-    }
-    Baleset.update();
-    Kutya.update();
-    Katyu.update();
-    Busz.update();
-    Kocsi1.update();
-    Kocsi2.update();
-    Taxi.update();
-    Nyuszi.update();
-    AkadalyBal.update();
-    AkadalyJobb.update();
-    AkadalyFent.update();
-    AkadalyLent.update();
-    Kocsi.newPos();    
-    Kocsi.update();
-    
-}
 }
 
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "loop");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }    
+}
 
 </script>
 
