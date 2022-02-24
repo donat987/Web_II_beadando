@@ -1,0 +1,127 @@
+body {
+    background-color: #3FA400;
+    display: block;
+}
+
+.bglight {
+    background-color: #57B846;
+}
+
+.navbar-brand{
+    font-family: JosefinSans-Bold;
+}
+
+
+#hiba{
+    color: crimson;
+    font-size: 25px;
+    margin: 0px 0px 50px 0px;
+    font-family: JosefinSans-Bold;
+}
+
+canvas {
+    border:1px solid black;
+    background-color: #3FA400;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: auto;
+    position: relative;
+}
+#margin{
+    margin: 50px 0px 0px 0px;
+}
+#jetekeleje{
+    background-image: url("kepek/utborito.png");
+    background-repeat: no-repeat, repeat;
+    height: 750px;
+    width: 1200px;
+    border:1px solid black;
+    background-color: black;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+#jatekvege{
+    display: none;
+    background-image: url("kepek/utborito.png");
+    background-repeat: no-repeat, repeat;
+    height: 750px;
+    width: 1200px;
+    border:1px solid black;
+    background-color: black;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+#kicsikocsi{
+    width: 800px;
+}
+#gratu{
+    margin: 50px 0px 0px 0px;
+    font-weight: bold;
+    font-family: "Courier New", Courier, monospace;
+    text-align: center;
+    font-size: 60px;
+    color: rgba(183, 255, 0, 0.9);
+    text-shadow: rgb(0, 0, 0) -6px 5px 6px;
+}
+#Nev{
+    margin: 0px 0px 50px 0px;
+    font-weight: bold;
+    font-family: "Courier New", Courier, monospace;
+    text-align: center;
+    font-size: 60px;
+    color: rgba(183, 255, 0, 0.9);
+    text-shadow: rgb(0, 0, 0) -6px 5px 6px;
+}
+.gomb {
+    margin: 50px 0px 0px 0px;
+    box-shadow: 3px 4px 0px 0px #899599;
+    background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+    background-color:#ededed;
+    border-radius:15px;
+    border:1px solid #d6bcd6;
+    display:inline-block;
+    cursor:pointer;
+    color:#030303;
+    font-family:Courier New;
+    font-size:17px;
+    font-weight:bold;
+    padding:14px 55px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #e1e2ed;
+}
+.gomb:hover {
+    background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+    background-color:#bab1ba;
+}
+.gomb:active {
+    position:relative;
+    top:1px;
+}
+table.customTable {
+    margin: 50px;
+    width: 50%;
+    background-color: #FFFFFF;
+    border-collapse: collapse;
+    border-width: 2px;
+    border-color: #7BD138;
+    border-style: solid;
+    color: #000000;
+}
+
+table.customTable td, table.customTable th {
+    border-width: 2px;
+    border-color: #7BD138;
+    border-style: solid;
+    padding: 5px;
+}
+
+table.customTable thead {
+    background-color: #0D8F0D;
+}
